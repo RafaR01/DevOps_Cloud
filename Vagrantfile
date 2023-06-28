@@ -99,5 +99,37 @@ Vagrant.configure("2") do |config|
       # the box generic/alpine might not have shared folders by default
       #node.vm.synced_folder "app/", "/var/www/html"
     end
+    
+    config.vm.define "consulmaster" do |node|
+      node.vm.box = "bento/ubuntu-22.04"
+      node.vm.hostname = "consulmaster"
+      node.vm.network :private_network, ip: "192.168.44.15"
+      node.vm.provider "virtualbox" do |v|
+        v.name = "ProjectA-consulmaster"
+        v.memory = 2048
+        v.cpus = 2
+        v.linked_clone = true
+      end
+      node.vm.provision "shell", path: "./provision/consul.sh"
+    
+      # the box generic/alpine might not have shared folders by default
+      #node.vm.synced_folder "app/", "/var/www/html"
+    end
+
+    config.vm.define "websocket" do |node|
+      node.vm.box = "bento/ubuntu-22.04"
+      node.vm.hostname = "websocket"
+      node.vm.network :private_network, ip: "192.168.44.16"
+      node.vm.provider "virtualbox" do |v|
+        v.name = "ProjectA-websocket"
+        v.memory = 2048
+        v.cpus = 2
+        v.linked_clone = true
+      end
+      node.vm.provision "shell", path: "./provision/websocket.sh"
+    
+      # the box generic/alpine might not have shared folders by default
+      #node.vm.synced_folder "app/", "/var/www/html"
+    end
 
 end
