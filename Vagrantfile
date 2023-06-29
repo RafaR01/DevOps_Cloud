@@ -35,34 +35,18 @@ Vagrant.configure("2") do |config|
       # the box generic/alpine might not have shared folders by default
       #node.vm.synced_folder "app/", "/var/www/html"
     end
-
-  config.vm.define "webapp1" do |node|
-      node.vm.box = "bento/ubuntu-22.04"
-      node.vm.hostname = "webapp1"
-      node.vm.network :private_network, ip: "192.168.44.11"
-      node.vm.provider "virtualbox" do |v|
-        v.name = "ProjectA-webapp1"
-        v.memory = 2048
-        v.cpus = 2
-        v.linked_clone = true
-      end
-      node.vm.provision "shell", path: "./provision/app.sh"
     
-      # the box generic/alpine might not have shared folders by default
-      #node.vm.synced_folder "app/", "/var/www/html"
-    end
-
-    config.vm.define "webapp2" do |node|
+    config.vm.define "consulmaster" do |node|
       node.vm.box = "bento/ubuntu-22.04"
-      node.vm.hostname = "webapp2"
-      node.vm.network :private_network, ip: "192.168.44.12"
+      node.vm.hostname = "consulmaster"
+      node.vm.network :private_network, ip: "192.168.44.15"
       node.vm.provider "virtualbox" do |v|
-        v.name = "ProjectA-webapp2"
+        v.name = "ProjectA-consulmaster"
         v.memory = 2048
         v.cpus = 2
         v.linked_clone = true
       end
-      node.vm.provision "shell", path: "./provision/app.sh"
+      node.vm.provision "shell", path: "./provision/consul.sh"
     
       # the box generic/alpine might not have shared folders by default
       #node.vm.synced_folder "app/", "/var/www/html"
@@ -99,22 +83,6 @@ Vagrant.configure("2") do |config|
       # the box generic/alpine might not have shared folders by default
       #node.vm.synced_folder "app/", "/var/www/html"
     end
-    
-    config.vm.define "consulmaster" do |node|
-      node.vm.box = "bento/ubuntu-22.04"
-      node.vm.hostname = "consulmaster"
-      node.vm.network :private_network, ip: "192.168.44.15"
-      node.vm.provider "virtualbox" do |v|
-        v.name = "ProjectA-consulmaster"
-        v.memory = 2048
-        v.cpus = 2
-        v.linked_clone = true
-      end
-      node.vm.provision "shell", path: "./provision/consul.sh"
-    
-      # the box generic/alpine might not have shared folders by default
-      #node.vm.synced_folder "app/", "/var/www/html"
-    end
 
     config.vm.define "websocket" do |node|
       node.vm.box = "bento/ubuntu-22.04"
@@ -131,5 +99,37 @@ Vagrant.configure("2") do |config|
       # the box generic/alpine might not have shared folders by default
       #node.vm.synced_folder "app/", "/var/www/html"
     end
+
+    config.vm.define "webapp1" do |node|
+        node.vm.box = "bento/ubuntu-22.04"
+        node.vm.hostname = "webapp1"
+        node.vm.network :private_network, ip: "192.168.44.11"
+        node.vm.provider "virtualbox" do |v|
+          v.name = "ProjectA-webapp1"
+          v.memory = 2048
+          v.cpus = 2
+          v.linked_clone = true
+        end
+        node.vm.provision "shell", path: "./provision/app.sh", args: ["1"]
+      
+        # the box generic/alpine might not have shared folders by default
+        #node.vm.synced_folder "app/", "/var/www/html"
+      end
+  
+      config.vm.define "webapp2" do |node|
+        node.vm.box = "bento/ubuntu-22.04"
+        node.vm.hostname = "webapp2"
+        node.vm.network :private_network, ip: "192.168.44.12"
+        node.vm.provider "virtualbox" do |v|
+          v.name = "ProjectA-webapp2"
+          v.memory = 2048
+          v.cpus = 2
+          v.linked_clone = true
+        end
+        node.vm.provision "shell", path: "./provision/app.sh", args: ["2"]
+      
+        # the box generic/alpine might not have shared folders by default
+        #node.vm.synced_folder "app/", "/var/www/html"
+      end
 
 end
